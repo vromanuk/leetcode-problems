@@ -1,3 +1,6 @@
+from typing import Set, Tuple
+
+
 class Node:
     def __init__(self, key: str | None = None):
         self.key = key
@@ -80,6 +83,48 @@ def find_words(board: list[list[str]], words: list[str]) -> list[str]:
     return list(result)
 
 
+def find_words_simplified(board: list[list[str]], words: list[str]) -> list[str]:
+    if not board or not board[0] or not words:
+        return []
+
+    prefix_tree = PrefixTree()
+    for word in words:
+        prefix_tree.insert(word)
+
+    result = set()
+    rows, cols = len(board), len(board[0])
+    directions = [(0, 1), (1, 0), (-1, 0), (0, -1)]
+
+    def dfs(row: int, col: int, seen: Set[Tuple[int, int]], node: Node):
+        if node.word:
+            result.add(node.word)
+
+        for dx, dy in directions:
+            new_row, new_col = row + dx, col + dy
+
+            if (
+                0 <= new_row < rows
+                and 0 <= new_col < cols
+                and (new_row, new_col) not in seen
+            ):
+                ch = board[new_row][new_col]
+                if ch in node.children:
+                    dfs(
+                        new_row,
+                        new_col,
+                        seen | {(new_row, new_col)},
+                        node.children[ch],
+                    )
+
+    for i in range(rows):
+        for j in range(cols):
+            ch = board[i][j]
+            if ch in prefix_tree.root.children:
+                dfs(i, j, {(i, j)}, prefix_tree.root.children[ch])
+
+    return list(result)
+
+
 def main():
     assert find_words(
         [
@@ -91,6 +136,17 @@ def main():
         ["oath", "pea", "eat", "rain"],
     ) == ["oath", "eat"]
     assert find_words([["a", "b"], ["c", "d"]], ["abcb"]) == []
+
+    assert find_words_simplified(
+        [
+            ["o", "a", "a", "n"],
+            ["e", "t", "a", "e"],
+            ["i", "h", "k", "r"],
+            ["i", "f", "l", "v"],
+        ],
+        ["oath", "pea", "eat", "rain"],
+    ) == ["oath", "eat"]
+    assert find_words_simplified([["a", "b"], ["c", "d"]], ["abcb"]) == []
 
     print("All tests passed!")
 

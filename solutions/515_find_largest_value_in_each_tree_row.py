@@ -33,12 +33,15 @@ def find_largest_values(root: Optional[TreeNode]) -> list[int]:
 
 
 def main():
-    assert find_largest_values(TreeNode(1, TreeNode(3, TreeNode(5), TreeNode(3)), TreeNode(2, None, TreeNode(9)))) == [
-        1, 3, 9]
+    assert find_largest_values(
+        TreeNode(
+            1, TreeNode(3, TreeNode(5), TreeNode(3)), TreeNode(2, None, TreeNode(9))
+        )
+    ) == [1, 3, 9]
     assert find_largest_values(TreeNode(1, TreeNode(2), TreeNode(3))) == [1, 3]
 
     print("All tests passed!")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
