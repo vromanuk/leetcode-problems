@@ -1,5 +1,5 @@
 def range_sum(nums: list[int], n: int, left: int, right: int) -> int:
-    MOD = 10 ** 9 + 7
+    MOD = 10**9 + 7
     if not nums:
         return 0
 
@@ -16,7 +16,7 @@ def range_sum(nums: list[int], n: int, left: int, right: int) -> int:
 
     all_sums.sort()
 
-    return sum(all_sums[left - 1: right]) % MOD
+    return sum(all_sums[left - 1 : right]) % MOD
 
 
 def main():
