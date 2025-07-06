@@ -28,24 +28,18 @@ class RangeModule:
         self._intervals = self._intervals[: write_idx + 1]
 
     def query_range(self, left: int, right: int) -> bool:
-        if not self._intervals:
-            return False
-
         low, high = 0, len(self._intervals) - 1
-        result_idx = -1
 
         while low <= high:
-            middle = (low + high) // 2
+            mid = (low + high) // 2
+            start, end = self._intervals[mid]
 
-            if self._intervals[middle][0] <= left:
-                result_idx = middle
-                low = middle + 1
+            if end < left:
+                low = mid + 1
+            elif start > left:
+                high = mid - 1
             else:
-                high = middle - 1
-
-        if result_idx != -1:
-            start, end = self._intervals[result_idx]
-            return start <= left and end >= right
+                return end >= right
 
         return False
 
